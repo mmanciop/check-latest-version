@@ -21,4 +21,5 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./
         with:
-          milliseconds: 1000
+          package-manager: pypi
+          package-name: lumigo_opentelemetry
