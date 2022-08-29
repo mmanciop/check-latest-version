@@ -1,11 +1,14 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Check latest version'
+description: 'GitHub action to retrieve the latest version of a package in various package managers'
+author: 'Michele Mancioppi'
 inputs:
-  milliseconds: # change this
+  package-manager:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'The package manager hosting the package; currently supported values are "npm" and "pypi"'
+    default: 'npm'
+  package-name:
+    required: true
+    description: 'The name of the package to be checked, e.g., "@lumigo/opentelemetry"'
 runs:
   using: 'node16'
   main: 'dist/index.js'
