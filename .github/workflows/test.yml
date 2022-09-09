@@ -6,6 +6,10 @@ on: # rebuild any PRs and main branch changes
       - main
       - 'releases/*'
 
+permissions:
+  pull-requests: write
+  repository-projects: write
+
 jobs:
   build: # make sure build/ci work properly
     runs-on: ubuntu-latest
