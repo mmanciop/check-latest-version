@@ -1,7 +1,7 @@
 name: 'dependabot-automerge'
 on: # rebuild any PRs and main branch changes
-  pull_request_target:
-    types: [labeled]
+  pull_request:
+    types: [opened, reopened]
 
 permissions: write-all
 
@@ -9,7 +9,7 @@ jobs:
   dependabot:
     name: 'Enable auto-merge for Dependabot'
     runs-on: ubuntu-latest
-    if: ${{ github.actor == 'dependabot[bot]' && github.event_name == 'pull_request'}}
+    if: ${{ github.actor == 'dependabot[bot]' }}
     steps:
       - name: Dependabot metadata
         id: metadata
