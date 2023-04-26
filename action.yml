@@ -4,11 +4,14 @@ author: 'Michele Mancioppi'
 inputs:
   package-manager:
     required: true
-    description: 'The package manager hosting the package; currently supported values are "npm" and "pypi"'
-    default: 'npm'
+    description: |
+      The package manager hosting the package; currently supported values are "github-releases", "npm" and "pypi"
+    default: npm
   package-name:
     required: true
-    description: 'The name of the package to be checked, e.g., "@lumigo/opentelemetry"'
+    description: |
+      The name of the package to be checked, e.g., "@lumigo/opentelemetry".
+      If the package manager is "github-releases", the package must have the "<org>/<repo>" form, e.g., "lumigo-io/opentelemetry-java-distro".
 runs:
   using: 'node16'
   main: 'dist/index.js'

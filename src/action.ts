@@ -1,6 +1,7 @@
-import * as core from '@actions/core'
-import {getLatestNpmPackageVersion} from './package-managers/npm'
-import {getLatestPypiPackageVersion} from './package-managers/pypi'
+import * as core from '@actions/core';
+import {getLatestGitHubRelease} from './package-managers/github-releases';
+import {getLatestNpmPackageVersion} from './package-managers/npm';
+import {getLatestPypiPackageVersion} from './package-managers/pypi';
 
 type FetchLatestPackageVersionFunction = (
   packageName: string
@@ -10,12 +11,14 @@ function getLatestPackageVersionFunction(
   packageManager: string
 ): FetchLatestPackageVersionFunction {
   switch (packageManager) {
+    case 'github-releases':
+      return getLatestGitHubRelease;
     case 'npm':
-      return getLatestNpmPackageVersion
+      return getLatestNpmPackageVersion;
     case 'pypi':
-      return getLatestPypiPackageVersion
+      return getLatestPypiPackageVersion;
     default:
-      throw new Error(`Invalid 'package-manager' value: '${packageManager}'`)
+      throw new Error(`Invalid 'package-manager' value: '${packageManager}'`);
   }
 }
 
