@@ -7,7 +7,7 @@ export async function getUrl(url: string): Promise<string> {
       // Do something with response data
       return response
     },
-    async function (error) {
+    async function (error: Error) {
       // Any status codes that falls outside the range of 2xx cause this function to trigger
       // Do something with response error
       return Promise.reject(error)
