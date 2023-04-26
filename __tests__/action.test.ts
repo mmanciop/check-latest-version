@@ -18,17 +18,92 @@ function mockGetUrl(resourcePath: string) {
 }
 
 describe('the run action', () => {
-  describe('using the npm package manager', () => {
-    afterEach(() => {
-      jest.restoreAllMocks()
+  afterEach(() => {
+    jest.restoreAllMocks()
+  })
+
+  describe('using the github-releases package manager', () => {
+    it('returns the latest release', async () => {
+      const getUrlSpy = mockGetUrl(
+        'github-releases/opentelemetry-collector-contrib.releases.json'
+      )
+      const setFailedSpy = jest.spyOn(core, 'setFailed')
+      const getInputSpy = jest
+        .spyOn(core, 'getInput')
+        .mockImplementation((name, _) => {
+          switch (name) {
+            case 'package-manager':
+              return 'github-releases'
+            case 'package-name':
+              return 'opentelemetry-collector-contrib'
+            default:
+              return ''
+          }
+        })
+
+      const setOutput = jest.spyOn(core, 'setOutput')
+
+      await run()
+
+      expect(getInputSpy).toHaveBeenCalled()
+      expect(getUrlSpy).toHaveBeenCalled()
+      expect(setOutput).toHaveBeenCalledWith(
+        'package-manager',
+        'github-releases'
+      )
+      expect(setOutput).toHaveBeenCalledWith(
+        'package-name',
+        'opentelemetry-collector-contrib'
+      )
+      expect(setOutput).toHaveBeenCalledWith('version', 'v0.71.0-lumigo2')
+      expect(setFailedSpy).not.toHaveBeenCalled()
     })
 
+    it('sets the action as failed when the repository does not exist', async () => {
+      const error = new Error('Not found')
+
+      const getUrlSpy = jest
+        .spyOn(common, 'getUrl')
+        .mockImplementation(() => Promise.reject(error))
+      const setFailedSpy = jest.spyOn(core, 'setFailed')
+      const getInputSpy = jest
+        .spyOn(core, 'getInput')
+        .mockImplementation((name, _) => {
+          switch (name) {
+            case 'package-manager':
+              return 'github-releases'
+            case 'package-name':
+              return 'lumigo-io/i-do-not-exist'
+            default:
+              return ''
+          }
+        })
+
+      const setOutput = jest.spyOn(core, 'setOutput')
+
+      await run()
+
+      expect(getInputSpy).toHaveBeenCalled()
+      expect(getUrlSpy).toHaveBeenCalled()
+      expect(setOutput).toHaveBeenCalledWith(
+        'package-manager',
+        'github-releases'
+      )
+      expect(setOutput).toHaveBeenCalledWith(
+        'package-name',
+        'lumigo-io/i-do-not-exist'
+      )
+      expect(setFailedSpy).toHaveBeenCalledWith(error)
+    })
+  })
+
+  describe('using the npm package manager', () => {
     it('returns the latest "@lumigo/opentelemetry" version', async () => {
       const getUrlSpy = mockGetUrl('npm/package-@lumigo-opentelemetry.json')
       const setFailedSpy = jest.spyOn(core, 'setFailed')
       const getInputSpy = jest
         .spyOn(core, 'getInput')
-        .mockImplementation((name, options) => {
+        .mockImplementation((name, _) => {
           switch (name) {
             case 'package-manager':
               return 'npm'
@@ -63,7 +138,7 @@ describe('the run action', () => {
       const setFailedSpy = jest.spyOn(core, 'setFailed')
       const getInputSpy = jest
         .spyOn(core, 'getInput')
-        .mockImplementation((name, options) => {
+        .mockImplementation((name, _) => {
           switch (name) {
             case 'package-manager':
               return 'npm'
@@ -90,16 +165,12 @@ describe('the run action', () => {
   })
 
   describe('using the pypi package manager', () => {
-    afterEach(() => {
-      jest.restoreAllMocks()
-    })
-
     it('returns the latest "lumigo_opentelemetry" version', async () => {
       const getUrlSpy = mockGetUrl('pypi/package-lumigo-opentelemetry.xml')
       const setFailedSpy = jest.spyOn(core, 'setFailed')
       const getInputSpy = jest
         .spyOn(core, 'getInput')
-        .mockImplementation((name, options) => {
+        .mockImplementation((name, _) => {
           switch (name) {
             case 'package-manager':
               return 'pypi'
@@ -135,7 +206,7 @@ describe('the run action', () => {
       const setFailedSpy = jest.spyOn(core, 'setFailed')
       const getInputSpy = jest
         .spyOn(core, 'getInput')
-        .mockImplementation((name, options) => {
+        .mockImplementation((name, _) => {
           switch (name) {
             case 'package-manager':
               return 'pypi'

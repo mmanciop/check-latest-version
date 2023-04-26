@@ -1,4 +1,5 @@
 import * as core from '@actions/core'
+import {getLatestGitHubRelease} from './package-managers/github-releases'
 import {getLatestNpmPackageVersion} from './package-managers/npm'
 import {getLatestPypiPackageVersion} from './package-managers/pypi'
 
@@ -10,6 +11,8 @@ function getLatestPackageVersionFunction(
   packageManager: string
 ): FetchLatestPackageVersionFunction {
   switch (packageManager) {
+    case 'github-releases':
+      return getLatestGitHubRelease
     case 'npm':
       return getLatestNpmPackageVersion
     case 'pypi':

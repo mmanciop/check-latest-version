@@ -19,7 +19,24 @@ jobs:
           npm install
       - run: |
           npm run all
-  test: # make sure the action works on a clean machine without building
+  # make sure the action works on a clean machine without building
+  test-github-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3.5.2
+      - uses: ./
+        with:
+          package-manager: github-releases
+          package-name: 'lumigo-io/opentelemetry-java-distro'
+  test-node:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3.5.2
+      - uses: ./
+        with:
+          package-manager: npm
+          package-name: '@lumigo/opentelemetry'
+  test-python:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3.5.2
