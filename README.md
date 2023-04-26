@@ -4,7 +4,7 @@
 
 # Check Latest Versions GitHub Action
 
-This GitHub action checks the latest version of given packages in [npm](npmjs.com/) or [PyPI](https://pypi.org/).
+This GitHub action checks the latest version of given packages in [npm](npmjs.com/) or [PyPI](https://pypi.org/), or releases in GitHub repositories.
  
 ## Usage
 
@@ -13,8 +13,8 @@ steps:
 - id: check-latest-version
   uses: mmanciop/check-latest-versions@v1
   with:
-    package-manager: <npm or pypi>
-    package-name: <e.g., @lumigo/opentelemetry or lumigo_opentelemetry>
+    package-manager: <github-releases, npm or pypi>
+    package-name: <e.g., lumigo-io/opentelemetry-java-distro, @lumigo/opentelemetry or lumigo_opentelemetry>
 ...
 - run: |
     echo "The latest version of the package is ${{steps.check-latest-version.outputs.version}}"
